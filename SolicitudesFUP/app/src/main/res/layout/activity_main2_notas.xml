@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:stretchColumns="1"
+    tools:context="com.example.solicitudesfup.Main2ActivityNotas">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_horizontal"
+        android:text="Fundación Universitaria de Popayán"
+        android:textColor="#080808"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="61dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logofup" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Codigo: "
+        android:textColor="#080808"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/Text_Codigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:inputType="number" />
+
+    <TableRow
+        android:id="@+id/Cabecera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/Txt_Cod_Asig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5px"
+            android:text="Codigo Asig."
+            android:textColor="#0a0a0a"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/Txt_Asignatura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="5px"
+            android:text="Asignatura"
+            android:textColor="#0a0a0a"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/Text_N1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5px"
+            android:text="Nota 1"
+            android:textColor="#0a0a0a"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/Text_N2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5px"
+            android:text="Nota 2"
+            android:textColor="#0a0a0a"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/Text_N3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5px"
+            android:text="Nota 3"
+            android:textColor="#0a0a0a"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/Text_Def"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5px"
+            android:text="Definitiva"
+            android:textColor="#0a0a0a"
+            android:textSize="15dp" />
+
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/SeparadorCabecera"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/LineaCabecera"
+            android:layout_width="fill_parent"
+            android:layout_height="2px"
+            android:layout_span="6"
+            android:background="#1933dc"></FrameLayout>
+    </TableRow>
+
+    <ListView
+        android:id="@+id/listaNot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+    </ListView>
+
+
+
+
+</TableLayout>

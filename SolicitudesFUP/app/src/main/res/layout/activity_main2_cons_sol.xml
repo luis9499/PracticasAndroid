@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:background="#e9f1fa"
+    tools:context="com.example.solicitudesfup.Main2Activity_Cons_Sol">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fundación Universitaria de Popayán"
+        android:textSize="20dp"
+        android:textColor="#080808"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Codigo: "
+        android:textColor="#080808"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/Text_Codigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:inputType="number" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Consultar"
+        android:background="#8ec2fc"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resultado"
+        android:textSize="20dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="#080808"
+        />
+
+    <TableRow
+        android:id="@+id/Cabecera_Consulta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/Txt_Cod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5px"
+            android:text="Solicitud"
+            android:textColor="#0a0a0a"
+            android:layout_marginRight="15dp"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/Txt_Estado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="5px"
+            android:text="Estado"
+            android:textColor="#0a0a0a"
+            android:layout_marginRight="15dp"
+            android:textSize="15dp" />
+
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/SeparadorCabecera"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <FrameLayout
+            android:id="@+id/LineaCabecera"
+            android:layout_width="fill_parent"
+            android:layout_height="2px"
+            android:layout_span="6"
+            android:background="#1933dc" >
+        </FrameLayout>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/Fila1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/Sol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="54543443"
+            android:layout_marginRight="15dp"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/Est"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Atendida"
+            android:layout_marginRight="15dp"
+            android:textSize="15dp" />
+
+
+
+    </TableRow>
+
+</LinearLayout>

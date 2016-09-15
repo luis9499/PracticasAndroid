@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#e9f1fa"
+    android:orientation="vertical"
+    tools:context="com.example.solicitudesfup.Main2Activity_Peticiones"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fundación Universitaria de Popayán"
+        android:textSize="20dp"
+        android:textColor="#080808"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:textStyle="bold" />
+    <ImageView
+        android:layout_width="61dp"
+        android:layout_height="45dp"
+        android:id="@+id/imageView2"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logofup" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Codigo: "
+        android:textColor="#080808"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/Text_Codigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:inputType="number" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Correo Electrónico: "
+        android:textSize="20dp"
+        android:textColor="#080808"
+        />
+
+    <EditText
+        android:id="@+id/Text_Email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:layout_marginBottom="10dp"
+        android:hint="correo@example.com" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Petición: "
+        android:textSize="20dp"
+        android:textColor="#080808"
+        />
+
+    <EditText
+        android:id="@+id/Text_Pet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:layout_weight="0.33" />
+
+    <Button
+        android:id="@+id/btn_registrarPet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#8ec2fc"
+        android:text="Registrar Petición"
+
+        android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>
