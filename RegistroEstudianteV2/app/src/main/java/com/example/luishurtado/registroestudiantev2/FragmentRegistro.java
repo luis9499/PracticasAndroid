@@ -87,7 +87,7 @@ public class FragmentRegistro extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
             {
-                Toast.makeText(adapterView.getContext(), (String) adapterView.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(adapterView.getContext(), (String) adapterView.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
             }
 
             @Override
