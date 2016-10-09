@@ -165,7 +165,7 @@ public class Camara extends Activity {
         public void onPictureTaken(byte[] data, Camera camera) {
 
 
-            Intent irPreview = new Intent(Camara.this, MainActivity.class);
+            Intent irPreview = new Intent(Camara.this, FragmentRegistro.class);
             irPreview.putExtra("data", data);
             irPreview.putExtra("idCamara", idCamara);
             Camara.this.startActivity(irPreview);
