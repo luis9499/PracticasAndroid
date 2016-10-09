@@ -9,10 +9,11 @@
     <!-- TODO: Update blank fragment layout -->
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="34dp"
+        android:layout_height="36dp"
         android:text="Foto"
         android:id="@+id/btnFoto"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.04" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -73,7 +74,7 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="34dp"
+        android:layout_height="36dp"
         android:text="Firma"
         android:id="@+id/btnFirma"
         android:layout_gravity="center_horizontal" />
