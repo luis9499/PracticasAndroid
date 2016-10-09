@@ -1,0 +1,34 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.luishurtado.registroestudiantev2.Camara">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="Cam2"
+        android:textOn="Cam1"
+        android:onClick="cambiarCamara"
+        android:src="@android:drawable/ic_menu_camera"
+        android:layout_alignParentRight="true"
+        android:id="@+id/btnCambiarCamara"
+        android:layout_gravity="top|bottom|right" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@android:drawable/ic_menu_camera"
+        android:onClick="tomarFoto"
+        android:id="@+id/btntomarFoto"
+        app:elevation="3dp"
+        app:fabSize="mini"
+        app:backgroundTint="@android:color/darker_gray"
+        android:layout_gravity="bottom|center" />
+
+</FrameLayout>
