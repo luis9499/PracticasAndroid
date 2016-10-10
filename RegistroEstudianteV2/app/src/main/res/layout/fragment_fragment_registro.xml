@@ -45,24 +45,12 @@
         android:id="@+id/txtApellido"
         android:hint="Apellido" />
 
-    <LinearLayout
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="18dp"
-            android:text="Genero"
-            android:layout_weight="0.14" />
+        android:id="@+id/txtGenero"
+        android:hint="Genero" />
 
-        <Spinner
-            android:layout_width="197dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtGenero"
-            android:hint="Genero" />
-    </LinearLayout>
 
     <EditText
         android:layout_width="match_parent"
