@@ -99,8 +99,8 @@ public class CaptureSignature extends AppCompatActivity {
                     mSignature.save(mView);
                     Bundle b = new Bundle();
                     b.putString("status", "done");
-                    b.putString("imagen",
-                            createImageFromBitmap(mSignature.save(mView)));
+                    b.putString("str_Firma", bmpToString(mSignature.save(mView)));
+                    b.putString("firma", createImageFromBitmap(mSignature.save(mView)));
                     Intent intent = new Intent();
                     intent.putExtras(b);
                     setResult(RESULT_OK,intent);
@@ -140,6 +140,15 @@ public class CaptureSignature extends AppCompatActivity {
             fileName = null;
         }
         return fileName;
+    }
+
+    public String bmpToString(Bitmap bmpIn){
+        Bitmap bmp = bmpIn;
+        ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b = baos.toByteArray();
+        String img_strFirma = Base64.encodeToString(b, Base64.DEFAULT);
+        return  img_strFirma;
     }
 
     @Override

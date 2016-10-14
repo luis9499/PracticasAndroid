@@ -45,11 +45,12 @@
         android:id="@+id/txtApellido"
         android:hint="Apellido" />
 
+
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtGenero"
-        android:hint="Genero" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtGenero"
+            android:hint="Genero" />
 
 
     <EditText
