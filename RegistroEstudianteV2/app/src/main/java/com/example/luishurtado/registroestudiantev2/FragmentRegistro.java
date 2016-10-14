@@ -7,17 +7,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,21 +46,35 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 
+import modelo.Estudiante;
+
+import static android.app.Activity.RESULT_OK;
 import static com.example.luishurtado.registroestudiantev2.MainActivityFirma.SIGNATURE_ACTIVITY;
 
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link FragmentRegistro.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the  factory method to
+ * create an instance of this fragment.
+ */
 public class FragmentRegistro extends Fragment {
     private static final String NOMBRE_CARPETA_APP = "com.example.luishurtado.reportes";
     private static final String GENERADOS = "reportesGenerados";
     Button bt_generar;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1888;
-
+    final static int CONS = 1;
+    Estudiante estu;
+    Bitmap bmp;
     Button btnGuardar, btnFoto, btnFirma;
-    String nombre, apellido, genero, documento, datoBdFirma;
+    String nombre, apellido, genero, documento, datoBdFirma, firma, datoBdFoto, foto, img_strFoto = "tu madre", img_strFirma = "la tuya";
     EditText txtNombre, txtApellido, txtGenero, txtDocumento;
     ImageView img_camera, img_firma;
-    final String NAMESPACE = "http://tempuri.org/";
+    final String NAMESPACE = Constantes.NAMESPACE_S;
     final String URL = "http://" + Constantes.IP + "/WebServiceLUG_ANDROID.asmx";
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -95,6 +113,7 @@ public class FragmentRegistro extends Fragment {
             document.addCreationDate();
             document.addTitle("ESTUDIANTES POR CURSO");
 
+            //StringBuffer aux = new StringBuffer();
             XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
             String htmlPDF = "<html><head></head><boody><h1>ESTUDIANTES " +
                     "inscritos</h1><p>Estos son los estudiantes inscritos " +
@@ -145,8 +164,10 @@ public class FragmentRegistro extends Fragment {
         txtApellido = (EditText) view.findViewById(R.id.txtApellido);
         txtDocumento = (EditText) view.findViewById(R.id.txtDocumento);
         txtGenero = (EditText) view.findViewById(R.id.txtGenero);
+
         img_camera = (ImageView) view.findViewById(R.id.img_Foto);
         img_firma = (ImageView) view.findViewById(R.id.camera_preview);
+
 
         btnFoto = (Button) view.findViewById(R.id.btnFoto);
         btnFoto.setOnClickListener(new View.OnClickListener() {
@@ -169,16 +190,16 @@ public class FragmentRegistro extends Fragment {
 
         btnGuardar = (Button) view.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View v) {
-                                              RegistrarAlumno registro = new RegistrarAlumno();
-                                              registro.execute();
-
-                                          }
-                                      }
+            @Override
+            public void onClick(View v) {
+                RegistrarAlumno registro = new RegistrarAlumno();
+                registro.execute();
+            }
+        }
         );
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -186,6 +207,7 @@ public class FragmentRegistro extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -204,10 +226,21 @@ public class FragmentRegistro extends Fragment {
         mListener = null;
     }
 
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -215,28 +248,39 @@ public class FragmentRegistro extends Fragment {
 
         try {
             if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-                if (resultCode == Activity.RESULT_OK) {
-                    Bitmap bmp = (Bitmap) data.getExtras().get("data");
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                    img_camera.setImageBitmap(bitmap);
+                if (resultCode == RESULT_OK) {
+                    {
+                        Bundle extras = data.getExtras();
+                        bmp = (Bitmap) extras.get("data");
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                        byte[] b = baos.toByteArray();
+                        img_strFoto = Base64.encodeToString(b, Base64.DEFAULT);
+                        img_camera.setImageBitmap(bmp);
+                    }
                 }
             }
         } catch (Exception e) {
+
         }
+
         try {
             if (requestCode == SIGNATURE_ACTIVITY && resultCode == CaptureSignature.RESULT_OK) {
-                Bitmap imagenFirma = null;
+                Bitmap imagenFirma;
                 Bundle bundle = data.getExtras();
                 String status = bundle.getString("status");
                 if (status.equalsIgnoreCase("done")) {
-                    datoBdFirma = bundle.getString("imagen");
+                    img_strFirma = bundle.getString("str_Firma");
+                    datoBdFirma = bundle.getString("firma");
                     try {
-                        imagenFirma = BitmapFactory.decodeStream(getActivity().openFileInput(datoBdFirma));
-                        img_firma.setImageBitmap(imagenFirma);
-                    } catch (FileNotFoundException ex) {
+                        //imagenFirma = BitmapFactory.decodeStream(getActivity().openFileInput(datoBdFirma));
+                        //datoBdFirma = BitMapToString(imagenFirma);
+                        //img_firma.setImageBitmap(imagenFirma);
+                        byte[] decodedString = Base64.decode(img_strFirma, Base64.DEFAULT);
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        img_firma.setImageBitmap(decodedByte);
+                        //FileNotFoundException
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                     Toast toast = Toast.makeText(getActivity(), "Signature capture succesfull", Toast.LENGTH_SHORT);
@@ -245,8 +289,33 @@ public class FragmentRegistro extends Fragment {
                 }
             }
         } catch (Exception exc) {
+
         }
+
     }
+
+    /**
+     * private String BitMapToStringFoto(ImageView bitmap) {
+     * Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.id.img_Foto);
+     * ByteArrayOutputStream stream = new ByteArrayOutputStream();
+     * bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+     * byte[] imageByteArray = stream.toByteArray();
+     * System.out.println("byte array:" + imageByteArray);
+     * String img_strFoto = Base64.encodeToString(imageByteArray, 0);
+     * return img_strFoto;
+     * }
+     */
+
+    private String BitMapToStringFirma(ImageView bitmap) {
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.id.camera_preview);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] imageByteArray = stream.toByteArray();
+        System.out.println("byte array:" + imageByteArray);
+        String img_strFirma = Base64.encodeToString(imageByteArray, 0);
+        return img_strFirma;
+    }
+
 
     //Tarea As�ncrona para llamar al WS de consulta en segundo plano
     private class RegistrarAlumno extends AsyncTask<String, Integer, Boolean> {
@@ -256,17 +325,25 @@ public class FragmentRegistro extends Fragment {
             boolean resul = true;
 
             final String METHOD_NAME = "registrarAlumno";
-            final String SOAP_ACTION = "http://tempuri.org/registrarAlumno";
+            final String SOAP_ACTION = "http://sgoliver.net/registrarAlumno";
+            //final String SOAP_ACTION = "http://tempuri.org/registrarAlumno";
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
             request.addProperty("nombre", nombre);
             request.addProperty("apellido", apellido);
             request.addProperty("genero", genero);
             request.addProperty("documento", documento);
+            request.addProperty("foto", img_strFoto);
+            request.addProperty("firma", img_strFirma);
+
+            System.out.println(img_strFoto + " espacio " + img_strFirma);
 
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+
             envelope.dotNet = true;
+
             envelope.setOutputSoapObject(request);
+
             HttpTransportSE transporte = new HttpTransportSE(URL);
 
             try {
@@ -288,10 +365,13 @@ public class FragmentRegistro extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             nombre = txtNombre.getText().toString();
             apellido = txtApellido.getText().toString();
             genero = txtGenero.getText().toString();
             documento = txtDocumento.getText().toString();
+            foto = img_strFoto;
+            firma = img_strFirma;
         }
 
         protected void onPostExecute(Boolean result) {
@@ -306,6 +386,7 @@ public class FragmentRegistro extends Fragment {
                 txtApellido.setText("");
                 txtGenero.setText("");
                 txtDocumento.setText("");
+
             } else {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
                 alerta.setTitle("Error: ");
@@ -316,4 +397,6 @@ public class FragmentRegistro extends Fragment {
 
         }
     }
+
+
 }
