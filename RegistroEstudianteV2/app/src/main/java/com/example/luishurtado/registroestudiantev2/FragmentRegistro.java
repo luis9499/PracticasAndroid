@@ -46,6 +46,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 
+
 import modelo.Estudiante;
 
 import static android.app.Activity.RESULT_OK;
@@ -68,7 +69,7 @@ public class FragmentRegistro extends Fragment {
     final static int CONS = 1;
     Estudiante estu;
     Bitmap bmp;
-    Button btnGuardar, btnFoto, btnFirma;
+    Button btnGuardar, btnFoto, btnFirma,btnDir;
     String nombre, apellido, genero, documento, datoBdFirma, firma, datoBdFoto, foto, img_strFoto = "tu madre", img_strFirma = "la tuya";
     EditText txtNombre, txtApellido, txtGenero, txtDocumento;
     ImageView img_camera, img_firma;
@@ -185,6 +186,15 @@ public class FragmentRegistro extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CaptureSignature.class);
                 startActivityForResult(intent, SIGNATURE_ACTIVITY);
+            }
+        });
+
+        btnDir = (Button) view.findViewById(R.id.btnDireccion);
+        btnDir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),Mapas.class);
+                startActivity(intent);
             }
         });
 
