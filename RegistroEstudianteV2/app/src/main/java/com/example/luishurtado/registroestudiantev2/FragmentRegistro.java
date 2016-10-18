@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
@@ -45,6 +46,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.sql.Array;
 
 
 import modelo.Estudiante;
@@ -69,12 +71,13 @@ public class FragmentRegistro extends Fragment {
     final static int CONS = 1;
     Estudiante estu;
     Bitmap bmp;
-    Button btnGuardar, btnFoto, btnFirma,btnDir;
+    Button btnGuardar, btnFoto, btnFirma, btnDir;
     String nombre, apellido, genero, documento, datoBdFirma, firma, datoBdFoto, foto, img_strFoto = "tu madre", img_strFirma = "la tuya";
     EditText txtNombre, txtApellido, txtGenero, txtDocumento;
     ImageView img_camera, img_firma;
     final String NAMESPACE = Constantes.NAMESPACE_S;
     final String URL = "http://" + Constantes.IP + "/WebServiceLUG_ANDROID.asmx";
+    Array nombres[], apellidos[], generos[], documentos[];
 
 
     private OnFragmentInteractionListener mListener;
@@ -105,6 +108,7 @@ public class FragmentRegistro extends Fragment {
             outputfile.delete();
         }
         try {
+
             PdfWriter pdfWriter = PdfWriter.getInstance(document,
                     new FileOutputStream(nombre_completo));
             document.open();
@@ -112,16 +116,43 @@ public class FragmentRegistro extends Fragment {
             document.addCreator("PDF");
             document.addSubject("GENERACION DE REPORTES EN PDF");
             document.addCreationDate();
-            document.addTitle("ESTUDIANTES POR CURSO");
+            document.addTitle("ESTUDIANTES REGISTRADOS");
 
-            //StringBuffer aux = new StringBuffer();
-            XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
-            String htmlPDF = "<html><head></head><boody><h1>ESTUDIANTES " +
-                    "inscritos</h1><p>Estos son los estudiantes inscritos " +
-                    "en PRIMERO</p>";
+            document.add(new Paragraph("ESTUDIANTES INSCRITOS"));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("LISTADO DE ESTUDIANTES INSCRITOS"));
+            document.add(new Paragraph(" "));
 
-            worker.parseXHtml(pdfWriter, document, new StringReader(htmlPDF));
+            listarAlumnos arregloNombres[] = new listarAlumnos[0];
+            /*listarAlumnos arregloApellidos[] = new listarAlumnos[1];
+            listarAlumnos arregloGeneros[] = new listarAlumnos[2];
+            listarAlumnos arregloDocumentos[] = new listarAlumnos[3];   */
+
+            for (int i = 0; i < arregloNombres.length; i++) {
+
+                document.add(new Paragraph("Nombres: " + nombres[i]));
+                document.add(new Paragraph("Apellidos: " + apellidos[i]));
+                document.add(new Paragraph("Genero: " + generos[i]));
+                document.add(new Paragraph("Identificacion: " + documentos[i]));
+                /*document.add(new Paragraph("Foto: "));
+                document.add(new Paragraph("Firma: "));
+
+                image = convertirImagen(fotos[i]);
+                Thread.sleep(500);
+                documento.add(image_foto);
+                document.add(new Paragraph(" "));
+                document.add(new Paragraph("Foto: "));
+                image = convertirImagen(Foto[i]);
+                Thread.sleep(500);
+                document.add(image);
+                document.add(new Paragraph(" "));
+                Thread.sleep(1000); */
+
+            }
+
             document.close();
+
+
             Toast.makeText(getActivity(), "REPORTE GENERADO", Toast.LENGTH_SHORT).show();
             muestraPDF(nombre_completo, getActivity());
 
@@ -193,19 +224,28 @@ public class FragmentRegistro extends Fragment {
         btnDir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),Mapas.class);
+                Intent intent = new Intent(getActivity(), Mapas.class);
                 startActivity(intent);
+            }
+        });
+
+        bt_generar = (Button) view.findViewById(R.id.btnConsultar2);
+        bt_generar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listarAlumnos lista = new listarAlumnos();
+                lista.execute();
             }
         });
 
         btnGuardar = (Button) view.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RegistrarAlumno registro = new RegistrarAlumno();
-                registro.execute();
-            }
-        }
+                                          @Override
+                                          public void onClick(View v) {
+                                              RegistrarAlumno registro = new RegistrarAlumno();
+                                              registro.execute();
+                                          }
+                                      }
         );
         return view;
     }
@@ -408,5 +448,73 @@ public class FragmentRegistro extends Fragment {
         }
     }
 
+    //Tarea As ncrona para llamar al WS de consulta en segundo plano
+    private class listarAlumnos extends AsyncTask<String, Integer, Boolean> {
+        private Estudiante[] listaEst;
 
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            boolean resul = true;
+
+            final String METHOD_NAME = "listarAlumnos";
+            final String SOAP_ACTION = "http://sgoliver.net/listarAlumnos";
+            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+
+            request.addProperty("nombre", nombre);
+            request.addProperty("apellido", apellido);
+            request.addProperty("genero", genero);
+            request.addProperty("documento", documento);
+            request.addProperty("foto", img_strFoto);
+            request.addProperty("firma", img_strFirma);
+
+
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+
+            envelope.dotNet = true;
+
+            envelope.setOutputSoapObject(request);
+
+            HttpTransportSE transporte = new HttpTransportSE(URL);
+
+            try {
+                transporte.call(SOAP_ACTION, envelope);
+                SoapObject resSoap = (SoapObject) envelope.getResponse();
+                listaEst = new Estudiante[resSoap.getPropertyCount()];
+                SoapObject lEst = (SoapObject) resSoap.getProperty(0);
+
+
+            } catch (Exception e) {
+                Log.i("Errores", e.toString());
+                resul = false;
+            }
+            return resul;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            nombre = txtNombre.getText().toString();
+            apellido = txtApellido.getText().toString();
+            genero = txtGenero.getText().toString();
+            documento = txtDocumento.getText().toString();
+            foto = img_strFoto;
+            firma = img_strFirma;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (result) {
+                AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
+                alerta.setTitle("PROCESO: ");
+                alerta.setMessage("LA CONSULTA ESTA EJECUTADA");
+                alerta.setPositiveButton("Atras", null);
+                alerta.show();
+
+
+            }
+        }
+    }
 }

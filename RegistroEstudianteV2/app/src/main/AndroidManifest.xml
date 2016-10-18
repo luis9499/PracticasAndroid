@@ -45,7 +45,8 @@
         <activity android:name=".Preferencias" />
         <activity android:name=".MainActivityCamara" />
         <activity android:name=".MainActivityFirma" />
-        <activity android:name=".Mapas"></activity>
+        <activity android:name=".Mapas" />
+        <activity android:name=".MarkerDetailActivity"></activity>
     </application>
 
 </manifest>

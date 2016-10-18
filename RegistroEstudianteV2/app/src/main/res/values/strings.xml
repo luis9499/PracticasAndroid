@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Registro Estudiante</string>
     <string name="external_dir">GetSignature</string>
+    <string name="marker_detail_latlng">(%1$.2f, %2$.2f)</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

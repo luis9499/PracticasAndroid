@@ -114,6 +114,11 @@
                     android:onClick="generarPDFOnClic"
                     android:id="@+id/btnConsultar"
                     android:layout_column="34" />
+                <Button
+                    android:text="Prueba"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnConsultar2" />
             </TableRow>
         </TableLayout>
 
