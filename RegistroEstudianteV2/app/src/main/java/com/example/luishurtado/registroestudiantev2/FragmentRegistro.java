@@ -27,12 +27,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -40,11 +34,6 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
 
 import modelo.Estudiante;
 
@@ -61,20 +50,17 @@ import static com.example.luishurtado.registroestudiantev2.MainActivityFirma.SIG
  * create an instance of this fragment.
  */
 public class FragmentRegistro extends Fragment {
-    private static final String NOMBRE_CARPETA_APP = "com.example.luishurtado.reportes";
-    private static final String GENERADOS = "reportesGenerados";
-    Button bt_generar;
+
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1888;
     final static int CONS = 1;
     Estudiante estu;
     Bitmap bmp;
-    Button btnGuardar, btnFoto, btnFirma;
-    String nombre, apellido, genero, documento, datoBdFirma, firma, datoBdFoto, foto, img_strFoto = "tu madre", img_strFirma = "la tuya";
+    Button btnGuardar, btnFoto, btnFirma, btnDir;
+    String nombre, apellido, genero, documento, datoBdFirma, firma, datoBdFoto, foto, img_strFoto = "", img_strFirma = "";
     EditText txtNombre, txtApellido, txtGenero, txtDocumento;
     ImageView img_camera, img_firma;
     final String NAMESPACE = Constantes.NAMESPACE_S;
     final String URL = "http://" + Constantes.IP + "/WebServiceLUG_ANDROID.asmx";
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,84 +68,11 @@ public class FragmentRegistro extends Fragment {
         // Required empty public constructor
     }
 
-    public void generarPDFOnClic() {
-        Document document = new Document(PageSize.LETTER);
-        String NOMBRE_ARCHIVO = "Estudiante.pdf";
-        String tarjetaSD = Environment.getExternalStorageDirectory().toString();
-        File pdfDir = new File(tarjetaSD + File.separator + NOMBRE_CARPETA_APP);
-
-        if (!pdfDir.exists()) {
-            pdfDir.mkdir();
-        }
-        File pdfSubDir = new File(pdfDir.getPath() + File.separator + GENERADOS);
-
-        if (!pdfSubDir.exists()) {
-            pdfSubDir.mkdir();
-        }
-        String nombre_completo = Environment.getExternalStorageDirectory()
-                + File.separator + NOMBRE_CARPETA_APP +
-                File.separator + GENERADOS + File.separator + NOMBRE_ARCHIVO;
-        File outputfile = new File(nombre_completo);
-        if (!outputfile.exists()) {
-            outputfile.delete();
-        }
-        try {
-            PdfWriter pdfWriter = PdfWriter.getInstance(document,
-                    new FileOutputStream(nombre_completo));
-            document.open();
-            document.addAuthor("REPORTE DE EJEMPLO");
-            document.addCreator("PDF");
-            document.addSubject("GENERACION DE REPORTES EN PDF");
-            document.addCreationDate();
-            document.addTitle("ESTUDIANTES POR CURSO");
-
-            //StringBuffer aux = new StringBuffer();
-            XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
-            String htmlPDF = "<html><head></head><boody><h1>ESTUDIANTES " +
-                    "inscritos</h1><p>Estos son los estudiantes inscritos " +
-                    "en PRIMERO</p>";
-
-            worker.parseXHtml(pdfWriter, document, new StringReader(htmlPDF));
-            document.close();
-            Toast.makeText(getActivity(), "REPORTE GENERADO", Toast.LENGTH_SHORT).show();
-            muestraPDF(nombre_completo, getActivity());
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void muestraPDF(String archivo, Context context) {
-        Toast.makeText(context, "Leyendo el archivo", Toast.LENGTH_SHORT).show();
-        File file = new File(archivo);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        try {
-            context.startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(context, "No tiene una app para abrir este tipo de archivo", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_fragment_registro, container, false);
-        bt_generar = (Button) view.findViewById(R.id.btnConsultar);
-        bt_generar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generarPDFOnClic();
-            }
-        });
+
         txtNombre = (EditText) view.findViewById(R.id.txtNombre);
         txtApellido = (EditText) view.findViewById(R.id.txtApellido);
         txtDocumento = (EditText) view.findViewById(R.id.txtDocumento);
@@ -167,7 +80,6 @@ public class FragmentRegistro extends Fragment {
 
         img_camera = (ImageView) view.findViewById(R.id.img_Foto);
         img_firma = (ImageView) view.findViewById(R.id.camera_preview);
-
 
         btnFoto = (Button) view.findViewById(R.id.btnFoto);
         btnFoto.setOnClickListener(new View.OnClickListener() {
@@ -188,18 +100,26 @@ public class FragmentRegistro extends Fragment {
             }
         });
 
+        btnDir = (Button) view.findViewById(R.id.btnDireccion);
+        btnDir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Mapas.class);
+                startActivity(intent);
+            }
+        });
+
         btnGuardar = (Button) view.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RegistrarAlumno registro = new RegistrarAlumno();
-                registro.execute();
-            }
-        }
+                                          @Override
+                                          public void onClick(View v) {
+                                              RegistrarAlumno registro = new RegistrarAlumno();
+                                              registro.execute();
+                                          }
+                                      }
         );
         return view;
     }
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -207,7 +127,6 @@ public class FragmentRegistro extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -240,7 +159,6 @@ public class FragmentRegistro extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -315,7 +233,6 @@ public class FragmentRegistro extends Fragment {
         String img_strFirma = Base64.encodeToString(imageByteArray, 0);
         return img_strFirma;
     }
-
 
     //Tarea As�ncrona para llamar al WS de consulta en segundo plano
     private class RegistrarAlumno extends AsyncTask<String, Integer, Boolean> {
@@ -397,6 +314,4 @@ public class FragmentRegistro extends Fragment {
 
         }
     }
-
-
 }

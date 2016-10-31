@@ -52,7 +52,10 @@
             android:id="@+id/txtGenero"
             android:hint="Genero" />
 
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,6 +63,15 @@
         android:ems="10"
         android:id="@+id/txtDocumento"
         android:hint="Documento" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/btnDireccion"
+        android:hint="Dirección" />
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
@@ -95,13 +107,6 @@
                     android:id="@+id/btnGuardar"
                     android:layout_column="1" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Consultar"
-                    android:onClick="generarPDFOnClic"
-                    android:id="@+id/btnConsultar"
-                    android:layout_column="34" />
             </TableRow>
         </TableLayout>
 

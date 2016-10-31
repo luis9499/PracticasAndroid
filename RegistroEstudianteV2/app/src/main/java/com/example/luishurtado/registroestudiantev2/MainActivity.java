@@ -20,10 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-
-
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FragmentRegistro.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentRegistro.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,17 +97,19 @@ public class MainActivity extends AppCompatActivity
             FragmentTransaction = true;
         }
 
+        if (id == R.id.consult) {
+            // Handle the camera action
+            fragment = new FragmentConsulta();
+            FragmentTransaction = true;
 
+        } else if (id == R.id.preferencias) {
 
-
-        else if (id == R.id.preferencias) {
-
-            startActivity(new Intent(this,Preferencias.class));
-            Log.i("NavigationDrawer","Entro en opción preferencias");
+            startActivity(new Intent(this, Preferencias.class));
+            Log.i("NavigationDrawer", "Entro en opción preferencias");
 
         }
 
-        if(FragmentTransaction) {
+        if (FragmentTransaction) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_main, fragment)
                     .commit();

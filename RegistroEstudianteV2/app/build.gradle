@@ -25,10 +25,11 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile files('libs/ksoap2-android-assembly-2.5.8-jar-with-dependencies.jar')
+    compile files('libs/itextg-5.5.6.jar')
+    compile files('libs/xmlworker-5.5.6.jar')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
-    compile files('libs/itextg-5.5.6.jar')
-    compile files('libs/xmlworker-5.5.6.jar')
+    compile 'com.google.android.gms:play-services-maps:9.6.1'
     testCompile 'junit:junit:4.12'
 }
